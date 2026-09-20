@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Anchor, Loader2, ShieldAlert, Waves } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DEMO_CLAIMS } from "@/lib/demo-claims";
+import { FALLBACK_VAULTS } from "@/lib/fallback-vaults";
 import {
   DEFAULT_MANDATE,
   type ClaimRequest,
@@ -32,14 +34,18 @@ const PROMPT_EXAMPLES = [
   "Allocate everything to the highest yield vault",
 ];
 
+function sliderNumber(value: number | readonly number[]): number {
+  return Array.isArray(value) ? Number(value[0]) : Number(value);
+}
+
 export function HarborDesk() {
   const [mandate, setMandate] = useState<Mandate>(DEFAULT_MANDATE);
-  const [vaults, setVaults] = useState<HarborVault[]>([]);
+  const [vaults, setVaults] = useState<HarborVault[]>(FALLBACK_VAULTS);
   const [vaultSource, setVaultSource] = useState<"live" | "fallback" | "loading">(
     "loading",
   );
   const [vaultError, setVaultError] = useState<string | null>(null);
-  const [claims, setClaims] = useState<ClaimRequest[]>([]);
+  const [claims, setClaims] = useState<ClaimRequest[]>(DEMO_CLAIMS);
   const [servConfigured, setServConfigured] = useState(false);
   const [prompt, setPrompt] = useState(PROMPT_EXAMPLES[0]);
   const [ledger, setLedger] = useState<DecisionLedgerEntry[]>([]);
@@ -47,38 +53,48 @@ export function HarborDesk() {
   const [error, setError] = useState<string | null>(null);
   const [quoteMemo, setQuoteMemo] = useState<string | null>(null);
   const [quoteError, setQuoteError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
-  const [quotePending, startQuote] = useTransition();
+  const [pending, setPending] = useState(false);
+  const [quotePending, setQuotePending] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
+    const controller = new AbortController();
+
+    async function loadDesk() {
       try {
         const [vRes, cRes] = await Promise.all([
-          fetch("/api/vaults"),
-          fetch("/api/claims"),
+          fetch("/api/vaults", { signal: controller.signal }),
+          fetch("/api/claims", { signal: controller.signal }),
         ]);
+        if (!vRes.ok || !cRes.ok) {
+          throw new Error(`Desk load failed (${vRes.status}/${cRes.status})`);
+        }
         const vData = (await vRes.json()) as VaultsResponse;
         const cData = (await cRes.json()) as {
           claims: ClaimRequest[];
           servConfigured: boolean;
         };
-        if (cancelled) return;
-        setVaults(vData.vaults);
-        setVaultSource(vData.source);
-        setVaultError(vData.error ?? null);
-        setClaims(cData.claims);
-        setServConfigured(cData.servConfigured);
-      } catch (e) {
-        if (!cancelled) {
+        if (controller.signal.aborted) return;
+        if (vData.vaults?.length) {
+          setVaults(vData.vaults);
+          setVaultSource(vData.source);
+        } else {
+          setVaults(FALLBACK_VAULTS);
           setVaultSource("fallback");
-          setVaultError(e instanceof Error ? e.message : "Failed to load vaults");
         }
+        setVaultError(vData.error ?? null);
+        if (cData.claims?.length) setClaims(cData.claims);
+        setServConfigured(Boolean(cData.servConfigured));
+      } catch (e) {
+        if (controller.signal.aborted) return;
+        setVaults(FALLBACK_VAULTS);
+        setVaultSource("fallback");
+        setClaims(DEMO_CLAIMS);
+        setVaultError(e instanceof Error ? e.message : "Failed to load vaults");
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
+    }
+
+    void loadDesk();
+    return () => controller.abort();
   }, []);
 
   const conflicts = useMemo(() => {
@@ -101,61 +117,66 @@ export function HarborDesk() {
     return notes;
   }, [mandate]);
 
-  function updateMandate<K extends keyof Mandate>(key: K, value: Mandate[K]) {
-    setMandate((m) => ({ ...m, [key]: value }));
-  }
+  const updateMandate = useCallback(
+    <K extends keyof Mandate>(key: K, value: Mandate[K]) => {
+      setMandate((m) => ({ ...m, [key]: value }));
+    },
+    [],
+  );
 
-  function runAllocate() {
+  async function runAllocate() {
     setError(null);
     setTxNote(null);
-    startTransition(async () => {
-      try {
-        const res = await fetch("/api/allocate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, mandate, claims }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Allocate failed");
-        setLedger((prev) => [data.entry as DecisionLedgerEntry, ...prev]);
-        setTxNote(data.txNote || null);
-        setServConfigured(Boolean(data.servConfigured));
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Allocate failed");
-      }
-    });
+    setPending(true);
+    try {
+      const res = await fetch("/api/allocate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, mandate, claims }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Allocate failed");
+      setLedger((prev) => [data.entry as DecisionLedgerEntry, ...prev]);
+      setTxNote(data.txNote || null);
+      setServConfigured(Boolean(data.servConfigured));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Allocate failed");
+    } finally {
+      setPending(false);
+    }
   }
 
-  function runQuote(paid: boolean) {
+  async function runQuote(paid: boolean) {
     setQuoteError(null);
     setQuoteMemo(null);
-    startQuote(async () => {
-      try {
-        const res = await fetch("/api/quote", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(paid ? { "X-Harbor-Paid": "demo" } : {}),
-          },
-          body: JSON.stringify({
-            mandate,
-            idleUsdc: mandate.idleUsdc,
-            prompt: `Should $${mandate.idleUsdc} idle USDC sit in licensed IXS RWA right now?`,
-          }),
-        });
-        const data = await res.json();
-        if (res.status === 402) {
-          setQuoteError(
-            `${data.paywallHint ?? "Payment required"} ($${data.priceUsdc} USDC)`,
-          );
-          return;
-        }
-        if (!res.ok) throw new Error(data.error ?? "Quote failed");
-        setQuoteMemo(data.memo as string);
-      } catch (e) {
-        setQuoteError(e instanceof Error ? e.message : "Quote failed");
+    setQuotePending(true);
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(paid ? { "X-Harbor-Paid": "demo" } : {}),
+        },
+        body: JSON.stringify({
+          mandate,
+          idleUsdc: mandate.idleUsdc,
+          prompt: `Should $${mandate.idleUsdc} idle USDC sit in licensed IXS RWA right now?`,
+        }),
+      });
+      const data = await res.json();
+      if (res.status === 402) {
+        setQuoteError(
+          `${data.paywallHint ?? "Payment required"} ($${data.priceUsdc} USDC)`,
+        );
+        return;
       }
-    });
+      if (!res.ok) throw new Error(data.error ?? "Quote failed");
+      setQuoteMemo(data.memo as string);
+    } catch (e) {
+      setQuoteError(e instanceof Error ? e.message : "Quote failed");
+    } finally {
+      setQuotePending(false);
+    }
   }
 
   function advanceClaim(id: string) {
@@ -294,10 +315,9 @@ export function HarborDesk() {
                   min={0}
                   max={100000}
                   step={100}
-                  onValueChange={(v) => {
-                    const val = Array.isArray(v) ? v[0] : v;
-                    updateMandate("idleUsdc", Number(val));
-                  }}
+                  onValueChange={(v) =>
+                    updateMandate("idleUsdc", sliderNumber(v))
+                  }
                 />
               </Field>
               <Field
@@ -308,10 +328,9 @@ export function HarborDesk() {
                   min={0}
                   max={100}
                   step={1}
-                  onValueChange={(v) => {
-                    const val = Array.isArray(v) ? v[0] : v;
-                    updateMandate("maxRwaPercent", Number(val));
-                  }}
+                  onValueChange={(v) =>
+                    updateMandate("maxRwaPercent", sliderNumber(v))
+                  }
                 />
               </Field>
               <Field
@@ -322,10 +341,9 @@ export function HarborDesk() {
                   min={0}
                   max={50000}
                   step={100}
-                  onValueChange={(v) => {
-                    const val = Array.isArray(v) ? v[0] : v;
-                    updateMandate("liquidityBufferUsdc", Number(val));
-                  }}
+                  onValueChange={(v) =>
+                    updateMandate("liquidityBufferUsdc", sliderNumber(v))
+                  }
                 />
               </Field>
               <Field
@@ -336,10 +354,9 @@ export function HarborDesk() {
                   min={0}
                   max={50000}
                   step={100}
-                  onValueChange={(v) => {
-                    const val = Array.isArray(v) ? v[0] : v;
-                    updateMandate("maxTicketUsdc", Number(val));
-                  }}
+                  onValueChange={(v) =>
+                    updateMandate("maxTicketUsdc", sliderNumber(v))
+                  }
                 />
               </Field>
             </div>
@@ -443,12 +460,14 @@ export function HarborDesk() {
           <TabsContent value="vaults" className="mt-4">
             <div className="grid gap-3 md:grid-cols-2">
               {vaultSource === "loading" && (
-                <p className="text-sm text-[var(--harbor-mute)]">Loading IXS vaults…</p>
+                <p className="text-sm text-[var(--harbor-mute)] md:col-span-2">
+                  Refreshing live IXS vaults… showing cached board meanwhile.
+                </p>
               )}
               {vaults.map((v) => (
                 <VaultCard key={v.id} vault={v} mandate={mandate} />
               ))}
-              {vaultSource !== "loading" && vaults.length === 0 && (
+              {vaults.length === 0 && (
                 <p className="text-sm text-[var(--harbor-mute)]">
                   No vaults returned. Check IXS connectivity.
                 </p>
