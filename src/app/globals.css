@@ -50,37 +50,37 @@
 }
 
 :root {
-  --harbor-ink: #0c2428;
-  --harbor-mute: #4d676c;
-  --harbor-sea: #1f6f78;
-  --harbor-deep: #0a2f36;
-  --harbor-foam: #e8f4f2;
-  --harbor-sand: #d8c4a4;
-  --harbor-wash: #eef5f3;
-  --harbor-line: #c5d6d3;
-  --background: #f3f0e8;
-  --foreground: #0c2428;
-  --card: #fbfaf6;
-  --card-foreground: #0c2428;
-  --popover: #fbfaf6;
-  --popover-foreground: #0c2428;
-  --primary: #1f6f78;
+  --harbor-ink: #071a22;
+  --harbor-mute: #3f5c66;
+  --harbor-sea: #0e7c86;
+  --harbor-deep: #04343c;
+  --harbor-foam: #e6f7f6;
+  --harbor-sand: #9ec5c0;
+  --harbor-wash: #e7f2f1;
+  --harbor-line: #b7d0cd;
+  --background: #e9f2f1;
+  --foreground: #071a22;
+  --card: #f4faf9;
+  --card-foreground: #071a22;
+  --popover: #f4faf9;
+  --popover-foreground: #071a22;
+  --primary: #0e7c86;
   --primary-foreground: #f3fbfa;
-  --secondary: #e2ebe8;
-  --secondary-foreground: #0c2428;
-  --muted: #e8eeec;
-  --muted-foreground: #4d676c;
-  --accent: #e8dfd0;
-  --accent-foreground: #0c2428;
+  --secondary: #d7e8e6;
+  --secondary-foreground: #071a22;
+  --muted: #dceae8;
+  --muted-foreground: #3f5c66;
+  --accent: #cfe3e0;
+  --accent-foreground: #071a22;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #c5d6d3;
-  --input: #c5d6d3;
-  --ring: #1f6f78;
-  --chart-1: #1f6f78;
-  --chart-2: #d8c4a4;
-  --chart-3: #0a2f36;
-  --chart-4: #7a9e98;
-  --chart-5: #b86b3d;
+  --border: #b7d0cd;
+  --input: #b7d0cd;
+  --ring: #0e7c86;
+  --chart-1: #0e7c86;
+  --chart-2: #9ec5c0;
+  --chart-3: #04343c;
+  --chart-4: #5f8f8a;
+  --chart-5: #1b4f57;
   --radius: 0.7rem;
   --sidebar: #eef5f3;
   --sidebar-foreground: #0c2428;
@@ -110,9 +110,9 @@
 
 .harbor-shell {
   background:
-    radial-gradient(1200px 500px at 10% -10%, rgba(31, 111, 120, 0.18), transparent 55%),
-    radial-gradient(900px 420px at 90% 0%, rgba(216, 196, 164, 0.35), transparent 50%),
-    linear-gradient(180deg, #f7f4ec 0%, #e9f1ef 45%, #f3f0e8 100%);
+    radial-gradient(1200px 500px at 10% -10%, rgba(14, 124, 134, 0.22), transparent 55%),
+    radial-gradient(900px 420px at 90% 0%, rgba(4, 52, 60, 0.12), transparent 50%),
+    linear-gradient(180deg, #eef7f6 0%, #e2efed 45%, #e9f2f1 100%);
   background-attachment: fixed;
 }
 
@@ -121,7 +121,7 @@
   top: 0;
   z-index: 40;
   backdrop-filter: blur(10px);
-  background: color-mix(in oklab, #f7f4ec 82%, transparent);
+  background: color-mix(in oklab, #eef7f6 82%, transparent);
   border-bottom: 1px solid color-mix(in oklab, var(--harbor-line) 70%, transparent);
 }
 
@@ -132,8 +132,8 @@
   height: 2rem;
   border-radius: 999px;
   color: var(--harbor-foam);
-  background: linear-gradient(145deg, #1f6f78, #0a2f36);
-  box-shadow: 0 8px 20px rgba(10, 47, 54, 0.25);
+  background: linear-gradient(145deg, #0e7c86, #04343c);
+  box-shadow: 0 8px 20px rgba(4, 52, 60, 0.25);
 }
 
 .harbor-chip {
@@ -216,8 +216,8 @@
 }
 
 .harbor-banner-warn {
-  border-color: color-mix(in oklab, #b86b3d 35%, var(--harbor-line));
-  background: #f8efe4;
+  border-color: color-mix(in oklab, #0e7c86 35%, var(--harbor-line));
+  background: #e4f3f2;
 }
 
 .harbor-panel {
