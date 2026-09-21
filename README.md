@@ -14,6 +14,10 @@ IXS already ships vaults and MCP tools. Most hackathon entries will wrap “depo
 - SERV Reasoning API (`inference-api.openserv.ai`) with `serv_shadow_agent` + `serv_prompt_guard`
 - IXS Vault REST (`/vaults`) and MCP (`/mcp`)
 
+## Live demo
+
+Production: [https://hatrey.vercel.app](https://hatrey.vercel.app)
+
 ## Run locally
 
 ```bash
@@ -31,7 +35,7 @@ Without `SERV_API_KEY`, Hatrey uses a deterministic mock reasoner so the desk st
 | Variable | Required | Description |
 | --- | --- | --- |
 | `SERV_API_KEY` | No | OpenServ console API key. Enables live SERV + shadow agent. |
-| `SERV_MODEL` | No | Defaults to `gpt-4.1-mini`. |
+| `SERV_MODEL` | No | Defaults to `gpt-5.4-mini`. |
 | `IXS_API_BASE_URL` | No | Defaults to `https://api-v2.ixs.finance`. |
 | `IXS_MCP_URL` | No | Defaults to `https://api-v2.ixs.finance/mcp`. |
 
