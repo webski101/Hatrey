@@ -1,12 +1,12 @@
-# Harbor
+# Hatrey
 
 Mandate-gated RWA treasury desk for the **OpenServ Hackathon Edition 01 — IXS Vaults** track.
 
-Harbor is a fiduciary for **agent treasuries**. An operator writes a mandate (idle USDC, RWA cap, liquidity buffer, permissionless-only, max ticket). **SERV Reasoning** decides `allocate` / `hold` / `redeem` / `wait_for_claim` / `refuse`. **IXS** REST + MCP supply live vaults and unsigned deposit/redeem calldata. Harbor never treats a queued ERC-7540 request as cash.
+Hatrey is a fiduciary for **agent treasuries**. An operator writes a mandate (idle USDC, RWA cap, liquidity buffer, permissionless-only, max ticket). **SERV Reasoning** decides `allocate` / `hold` / `redeem` / `wait_for_claim` / `refuse`. **IXS** REST + MCP supply live vaults and unsigned deposit/redeem calldata. Hatrey never treats a queued ERC-7540 request as cash.
 
 ## Why this exists
 
-IXS already ships vaults and MCP tools. Most hackathon entries will wrap “deposit USDC.” Harbor is the missing **policy + settlement-aware allocator + audit ledger + paid quote API**.
+IXS already ships vaults and MCP tools. Most hackathon entries will wrap “deposit USDC.” Hatrey is the missing **policy + settlement-aware allocator + audit ledger + paid quote API**.
 
 ## Stack
 
@@ -24,7 +24,7 @@ npm run dev
 
 Open [http://127.0.0.1:43131](http://127.0.0.1:43131).
 
-Without `SERV_API_KEY`, Harbor uses a deterministic mock reasoner so the desk stays fully demoable.
+Without `SERV_API_KEY`, Hatrey uses a deterministic mock reasoner so the desk stays fully demoable.
 
 ## Environment
 
@@ -40,9 +40,9 @@ Without `SERV_API_KEY`, Harbor uses a deterministic mock reasoner so the desk st
 1. **Mandate** — sliders + permissionless switch; surfaces rule conflicts.
 2. **Allocator** — chat the desk; refusals and claim waits are first-class.
 3. **Vault board** — live IXS vaults (permissionless vs KYC, settlement).
-4. **Claim queue** — demo async settlement; advance claims to see Harbor block allocates.
+4. **Claim queue** — demo async settlement; advance claims to see Hatrey block allocates.
 5. **Decision ledger** — every ask with mandate checks + unsigned tx steps.
-6. **Revenue** — `POST /api/quote` returns HTTP 402 until `X-Harbor-Paid: demo`.
+6. **Revenue** — `POST /api/quote` returns HTTP 402 until `X-Hatrey-Paid: demo`.
 
 ## API
 

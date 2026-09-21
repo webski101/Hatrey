@@ -1,5 +1,5 @@
-import { HarborDesk } from "@/components/harbor-desk";
+import { HatreyDesk } from "@/components/hatrey-desk";
 
 export default function Home() {
-  return <HarborDesk />;
+  return <HatreyDesk />;
 }

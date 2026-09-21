@@ -1,6 +1,6 @@
-import type { HarborVault } from "@/lib/types";
+import type { HatreyVault } from "@/lib/types";
 
-export const FALLBACK_VAULTS: HarborVault[] = [
+export const FALLBACK_VAULTS: HatreyVault[] = [
   {
     id: "6a26624ca7d16b245d665475",
     name: "IX High Yield Bond (USDC) — Permissionless",
@@ -67,7 +67,7 @@ export const FALLBACK_VAULTS: HarborVault[] = [
     status: "active",
     productId: "ixhyb",
     description:
-      "KYC / whitelist required. Harbor refuses this vault when the mandate is permissionless-only.",
+      "KYC / whitelist required. Hatrey refuses this vault when the mandate is permissionless-only.",
     riskBullets: [
       "Identity verification required before deposit.",
       "Jurisdiction restrictions apply.",

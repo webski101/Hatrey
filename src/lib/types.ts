@@ -24,7 +24,7 @@ export const DEFAULT_MANDATE: Mandate = {
 
 export type VaultSettlement = "sync" | "async-erc7540" | "queued" | "unknown";
 
-export type HarborVault = {
+export type HatreyVault = {
   id: string;
   name: string;
   symbol: string;

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   try {
     const raw = await req.json().catch(() => ({}));
     const body = BodySchema.parse(raw);
-    const paymentHeader = req.headers.get("x-payment") ?? req.headers.get("x-harbor-paid");
+    const paymentHeader = req.headers.get("x-payment") ?? req.headers.get("x-hatrey-paid");
 
     if (!paymentHeader) {
       return NextResponse.json(
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
           error: "Payment required",
           priceUsdc: PRICE_USDC,
           paywallHint:
-            "Send header X-Harbor-Paid: demo (or wire x402) to unlock the allocation memo.",
+            "Send header X-Hatrey-Paid: demo (or wire x402) to unlock the allocation memo.",
           priced: true,
         },
         { status: 402 },
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     });
 
     const memo = [
-      `Harbor quote — ${result.decision.action.toUpperCase()}`,
+      `Hatrey quote — ${result.decision.action.toUpperCase()}`,
       `Size: ${result.decision.sizeUsdc ?? "n/a"} USDC`,
       `Vault: ${result.decision.vaultName ?? "none"}`,
       `Settlement: ${result.decision.settlement ?? "n/a"}`,
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
     const payload: QuoteResponse = {
       priced: true,
       priceUsdc: PRICE_USDC,
-      paywallHint: "Paid via X-Harbor-Paid demo header. Replace with x402 for production.",
+      paywallHint: "Paid via X-Hatrey-Paid demo header. Replace with x402 for production.",
       decision: result.decision,
       memo,
       source: result.source,
@@ -91,7 +91,7 @@ export async function GET() {
     description:
       "Paid allocation memo for agent treasuries: should idle USDC sit in licensed IXS RWA right now?",
     headers: {
-      "X-Harbor-Paid": "demo",
+      "X-Hatrey-Paid": "demo",
     },
   });
 }

@@ -7,10 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-harbor-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-hatrey-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-heading: var(--font-harbor-display), ui-serif, Georgia, serif;
-  --font-display: var(--font-harbor-display), ui-serif, Georgia, serif;
+  --font-heading: var(--font-hatrey-display), ui-serif, Georgia, serif;
+  --font-display: var(--font-hatrey-display), ui-serif, Georgia, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -50,14 +50,14 @@
 }
 
 :root {
-  --harbor-ink: #071a22;
-  --harbor-mute: #3f5c66;
-  --harbor-sea: #0e7c86;
-  --harbor-deep: #04343c;
-  --harbor-foam: #e6f7f6;
-  --harbor-sand: #9ec5c0;
-  --harbor-wash: #e7f2f1;
-  --harbor-line: #b7d0cd;
+  --hatrey-ink: #071a22;
+  --hatrey-mute: #3f5c66;
+  --hatrey-sea: #0e7c86;
+  --hatrey-deep: #04343c;
+  --hatrey-foam: #e6f7f6;
+  --hatrey-sand: #9ec5c0;
+  --hatrey-wash: #e7f2f1;
+  --hatrey-line: #b7d0cd;
   --background: #e9f2f1;
   --foreground: #071a22;
   --card: #f4faf9;
@@ -105,10 +105,10 @@
 }
 
 .font-display {
-  font-family: var(--font-harbor-display), ui-serif, Georgia, serif;
+  font-family: var(--font-hatrey-display), ui-serif, Georgia, serif;
 }
 
-.harbor-shell {
+.hatrey-shell {
   background:
     radial-gradient(1200px 500px at 10% -10%, rgba(14, 124, 134, 0.22), transparent 55%),
     radial-gradient(900px 420px at 90% 0%, rgba(4, 52, 60, 0.12), transparent 50%),
@@ -116,43 +116,43 @@
   background-attachment: fixed;
 }
 
-.harbor-nav {
+.hatrey-nav {
   position: sticky;
   top: 0;
   z-index: 40;
   backdrop-filter: blur(10px);
   background: color-mix(in oklab, #eef7f6 82%, transparent);
-  border-bottom: 1px solid color-mix(in oklab, var(--harbor-line) 70%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--hatrey-line) 70%, transparent);
 }
 
-.harbor-mark {
+.hatrey-mark {
   display: grid;
   place-items: center;
   width: 2rem;
   height: 2rem;
   border-radius: 999px;
-  color: var(--harbor-foam);
+  color: var(--hatrey-foam);
   background: linear-gradient(145deg, #0e7c86, #04343c);
   box-shadow: 0 8px 20px rgba(4, 52, 60, 0.25);
 }
 
-.harbor-chip {
+.hatrey-chip {
   font-weight: 500;
 }
 
-.harbor-hero {
+.hatrey-hero {
   display: grid;
   gap: 1.5rem;
   align-items: stretch;
 }
 
 @media (min-width: 900px) {
-  .harbor-hero {
+  .hatrey-hero {
     grid-template-columns: 1.15fr 0.85fr;
   }
 }
 
-.harbor-kicker {
+.hatrey-kicker {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -160,10 +160,10 @@
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--harbor-sea);
+  color: var(--hatrey-sea);
 }
 
-.harbor-hero-panel {
+.hatrey-hero-panel {
   position: relative;
   overflow: hidden;
   min-height: 220px;
@@ -178,22 +178,22 @@
   box-shadow: 0 24px 50px rgba(4, 52, 60, 0.28);
 }
 
-.harbor-tide {
+.hatrey-tide {
   position: absolute;
   inset: auto -20% -30% -20%;
   height: 70%;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 0%, rgba(232, 244, 242, 0.22), transparent 60%);
-  animation: harbor-swell 9s ease-in-out infinite;
+  animation: hatrey-swell 9s ease-in-out infinite;
 }
 
-.harbor-tide-2 {
+.hatrey-tide-2 {
   animation-delay: -3.5s;
   opacity: 0.7;
   transform: scale(1.15);
 }
 
-@keyframes harbor-swell {
+@keyframes hatrey-swell {
   0%,
   100% {
     transform: translateY(8%) scale(1);
@@ -203,48 +203,48 @@
   }
 }
 
-.harbor-banner {
+.hatrey-banner {
   display: flex;
   gap: 0.65rem;
   align-items: flex-start;
   border-radius: 0.85rem;
-  border: 1px solid color-mix(in oklab, var(--harbor-sea) 25%, var(--harbor-line));
-  background: color-mix(in oklab, white 70%, var(--harbor-wash));
+  border: 1px solid color-mix(in oklab, var(--hatrey-sea) 25%, var(--hatrey-line));
+  background: color-mix(in oklab, white 70%, var(--hatrey-wash));
   padding: 0.85rem 1rem;
   font-size: 0.875rem;
-  color: var(--harbor-ink);
+  color: var(--hatrey-ink);
 }
 
-.harbor-banner-warn {
-  border-color: color-mix(in oklab, #0e7c86 35%, var(--harbor-line));
+.hatrey-banner-warn {
+  border-color: color-mix(in oklab, #0e7c86 35%, var(--hatrey-line));
   background: #e4f3f2;
 }
 
-.harbor-panel {
+.hatrey-panel {
   border-radius: 1.1rem;
-  border: 1px solid var(--harbor-line);
-  background: color-mix(in oklab, white 78%, var(--harbor-wash));
+  border: 1px solid var(--hatrey-line);
+  background: color-mix(in oklab, white 78%, var(--hatrey-wash));
   padding: 1.25rem;
   box-shadow: 0 10px 30px rgba(12, 36, 40, 0.04);
 }
 
-.harbor-row {
+.hatrey-row {
   border-radius: 0.95rem;
-  border: 1px solid var(--harbor-line);
+  border: 1px solid var(--hatrey-line);
   background: color-mix(in oklab, white 88%, transparent);
   padding: 1rem;
 }
 
-.harbor-tabs {
-  background: color-mix(in oklab, white 55%, var(--harbor-wash)) !important;
-  border: 1px solid var(--harbor-line);
+.hatrey-tabs {
+  background: color-mix(in oklab, white 55%, var(--hatrey-wash)) !important;
+  border: 1px solid var(--hatrey-line);
   flex-wrap: wrap;
   height: auto !important;
   min-height: 2rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .harbor-tide {
+  .hatrey-tide {
     animation: none;
   }
 }

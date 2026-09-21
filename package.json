@@ -1,5 +1,5 @@
 {
-  "name": "harbor",
+  "name": "hatrey",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -32,5 +32,5 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "description": "Harbor — mandate-gated RWA treasury desk for OpenServ IXS Vaults track"
+  "description": "Hatrey — mandate-gated RWA treasury desk for OpenServ IXS Vaults track"
 }

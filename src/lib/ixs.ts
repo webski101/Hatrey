@@ -1,4 +1,4 @@
-import type { HarborVault, VaultSettlement } from "@/lib/types";
+import type { HatreyVault, VaultSettlement } from "@/lib/types";
 import { FALLBACK_VAULTS } from "@/lib/fallback-vaults";
 
 export { FALLBACK_VAULTS };
@@ -35,7 +35,7 @@ type IxsListResponse = {
   items?: IxsVaultRaw[];
 };
 
-function mapVault(raw: IxsVaultRaw, settlement: VaultSettlement = "unknown"): HarborVault {
+function mapVault(raw: IxsVaultRaw, settlement: VaultSettlement = "unknown"): HatreyVault {
   return {
     id: raw.id,
     name: raw.name,
@@ -101,7 +101,7 @@ async function mcpCall(
 }
 
 export async function listVaults(): Promise<{
-  vaults: HarborVault[];
+  vaults: HatreyVault[];
   source: "live" | "fallback";
   error?: string;
 }> {
@@ -200,7 +200,7 @@ export async function checkWhitelist(
     await mcpCall("initialize", {
       protocolVersion: "2024-11-05",
       capabilities: {},
-      clientInfo: { name: "harbor", version: "0.1.0" },
+      clientInfo: { name: "hatrey", version: "0.1.0" },
     });
     const result = await mcpCall(
       "tools/call",
@@ -235,7 +235,7 @@ export async function checkWhitelist(
       allowed: !vault.requiresWhitelist,
       source: "inferred",
       note: vault.requiresWhitelist
-        ? "MCP unavailable. Vault requires whitelist — Harbor refuses until verified."
+        ? "MCP unavailable. Vault requires whitelist — Hatrey refuses until verified."
         : "MCP unavailable. Permissionless vault inferred as open.",
     };
   }
@@ -250,7 +250,7 @@ export async function buildDepositSteps(input: {
     await mcpCall("initialize", {
       protocolVersion: "2024-11-05",
       capabilities: {},
-      clientInfo: { name: "harbor", version: "0.1.0" },
+      clientInfo: { name: "hatrey", version: "0.1.0" },
     });
     const result = await mcpCall(
       "tools/call",
@@ -264,7 +264,7 @@ export async function buildDepositSteps(input: {
     const steps = parseTxSteps(text, "deposit");
     return {
       steps,
-      note: "Unsigned calldata from IXS MCP. Harbor never invents calldata.",
+      note: "Unsigned calldata from IXS MCP. Hatrey never invents calldata.",
       source: "mcp",
     };
   } catch {
@@ -294,7 +294,7 @@ export async function buildRedeemSteps(input: {
     await mcpCall("initialize", {
       protocolVersion: "2024-11-05",
       capabilities: {},
-      clientInfo: { name: "harbor", version: "0.1.0" },
+      clientInfo: { name: "hatrey", version: "0.1.0" },
     });
     const result = await mcpCall(
       "tools/call",

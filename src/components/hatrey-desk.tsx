@@ -17,12 +17,12 @@ import {
   DEFAULT_MANDATE,
   type ClaimRequest,
   type DecisionLedgerEntry,
-  type HarborVault,
+  type HatreyVault,
   type Mandate,
 } from "@/lib/types";
 
 type VaultsResponse = {
-  vaults: HarborVault[];
+  vaults: HatreyVault[];
   source: "live" | "fallback";
   error?: string;
 };
@@ -38,9 +38,9 @@ function sliderNumber(value: number | readonly number[]): number {
   return Array.isArray(value) ? Number(value[0]) : Number(value);
 }
 
-export function HarborDesk() {
+export function HatreyDesk() {
   const [mandate, setMandate] = useState<Mandate>(DEFAULT_MANDATE);
-  const [vaults, setVaults] = useState<HarborVault[]>(FALLBACK_VAULTS);
+  const [vaults, setVaults] = useState<HatreyVault[]>(FALLBACK_VAULTS);
   const [vaultSource, setVaultSource] = useState<"live" | "fallback" | "loading">(
     "loading",
   );
@@ -106,7 +106,7 @@ export function HarborDesk() {
     }
     if (mandate.permissionlessOnly) {
       notes.push(
-        "Permissionless-only: KYC vaults stay visible but Harbor will refuse them.",
+        "Permissionless-only: KYC vaults stay visible but Hatrey will refuse them.",
       );
     }
     if (mandate.maxTicketUsdc > mandate.idleUsdc - mandate.liquidityBufferUsdc) {
@@ -155,7 +155,7 @@ export function HarborDesk() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(paid ? { "X-Harbor-Paid": "demo" } : {}),
+          ...(paid ? { "X-Hatrey-Paid": "demo" } : {}),
         },
         body: JSON.stringify({
           mandate,
@@ -205,27 +205,27 @@ export function HarborDesk() {
   const latest = ledger[0];
 
   return (
-    <div className="harbor-shell min-h-screen">
-      <header className="harbor-nav">
+    <div className="hatrey-shell min-h-screen">
+      <header className="hatrey-nav">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="harbor-mark" aria-hidden>
+            <div className="hatrey-mark" aria-hidden>
               <Anchor className="size-4" />
             </div>
             <div>
-              <p className="font-display text-xl tracking-tight text-[var(--harbor-ink)]">
-                Harbor
+              <p className="font-display text-xl tracking-tight text-[var(--hatrey-ink)]">
+                Hatrey
               </p>
-              <p className="text-xs text-[var(--harbor-mute)]">
+              <p className="text-xs text-[var(--hatrey-mute)]">
                 IXS RWA desk · OpenServ Edition 01
               </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className="harbor-chip">
+            <Badge variant="secondary" className="hatrey-chip">
               {servConfigured ? "SERV live" : "Mock reasoner"}
             </Badge>
-            <Badge variant="outline" className="harbor-chip">
+            <Badge variant="outline" className="hatrey-chip">
               Vaults {vaultSource === "loading" ? "…" : vaultSource}
             </Badge>
           </div>
@@ -233,18 +233,18 @@ export function HarborDesk() {
       </header>
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6">
-        <section className="harbor-hero">
-          <div className="harbor-hero-copy">
-            <p className="harbor-kicker">
+        <section className="hatrey-hero">
+          <div className="hatrey-hero-copy">
+            <p className="hatrey-kicker">
               <Waves className="size-3.5" />
               Fiduciary for agent treasuries
             </p>
-            <h1 className="font-display text-4xl leading-[1.05] tracking-tight text-[var(--harbor-ink)] sm:text-5xl">
-              Harbor
+            <h1 className="font-display text-4xl leading-[1.05] tracking-tight text-[var(--hatrey-ink)] sm:text-5xl">
+              Hatrey
             </h1>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--harbor-mute)] sm:text-base">
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--hatrey-mute)] sm:text-base">
               Write a mandate. SERV decides allocate, hold, redeem, or wait for
-              claim. IXS builds unsigned vault txs — Harbor never pretends a
+              claim. IXS builds unsigned vault txs — Hatrey never pretends a
               queued ERC-7540 request is cash.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
@@ -256,20 +256,20 @@ export function HarborDesk() {
               </Button>
             </div>
           </div>
-          <div className="harbor-hero-panel" aria-hidden>
-            <div className="harbor-tide" />
-            <div className="harbor-tide harbor-tide-2" />
-            <p className="relative z-10 font-display text-2xl text-[var(--harbor-foam)]">
+          <div className="hatrey-hero-panel" aria-hidden>
+            <div className="hatrey-tide" />
+            <div className="hatrey-tide hatrey-tide-2" />
+            <p className="relative z-10 font-display text-2xl text-[var(--hatrey-foam)]">
               Idle USDC → licensed RWA
             </p>
-            <p className="relative z-10 mt-2 max-w-xs text-sm text-[var(--harbor-foam)]/75">
+            <p className="relative z-10 mt-2 max-w-xs text-sm text-[var(--hatrey-foam)]/75">
               Settlement-aware. Mandate-gated. Auditable.
             </p>
           </div>
         </section>
 
         {!servConfigured && (
-          <div className="harbor-banner mt-6">
+          <div className="hatrey-banner mt-6">
             <ShieldAlert className="mt-0.5 size-4 shrink-0" />
             <p>
               No <code className="font-mono text-xs">SERV_API_KEY</code> — using
@@ -288,7 +288,7 @@ export function HarborDesk() {
         )}
 
         {vaultError && vaultSource === "fallback" && (
-          <div className="harbor-banner harbor-banner-warn mt-3">
+          <div className="hatrey-banner hatrey-banner-warn mt-3">
             <p>
               IXS live feed unavailable ({vaultError}). Showing cached vault
               board so the desk stays demoable.
@@ -297,13 +297,13 @@ export function HarborDesk() {
         )}
 
         <div id="desk" className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <section className="harbor-panel space-y-5">
+          <section className="hatrey-panel space-y-5">
             <div>
-              <h2 className="font-display text-2xl text-[var(--harbor-ink)]">
+              <h2 className="font-display text-2xl text-[var(--hatrey-ink)]">
                 Mandate
               </h2>
-              <p className="mt-1 text-sm text-[var(--harbor-mute)]">
-                Conflicting rules are a feature — Harbor surfaces them before it
+              <p className="mt-1 text-sm text-[var(--hatrey-mute)]">
+                Conflicting rules are a feature — Hatrey surfaces them before it
                 acts.
               </p>
             </div>
@@ -361,10 +361,10 @@ export function HarborDesk() {
               </Field>
             </div>
 
-            <div className="flex items-center justify-between gap-3 rounded-lg border border-[var(--harbor-line)] bg-[var(--harbor-wash)] px-3 py-2.5">
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-[var(--hatrey-line)] bg-[var(--hatrey-wash)] px-3 py-2.5">
               <div>
                 <Label htmlFor="perm">Permissionless vaults only</Label>
-                <p className="text-xs text-[var(--harbor-mute)]">
+                <p className="text-xs text-[var(--hatrey-mute)]">
                   Refuse KYC / whitelist vaults
                 </p>
               </div>
@@ -396,12 +396,12 @@ export function HarborDesk() {
             )}
           </section>
 
-          <section className="harbor-panel space-y-4">
+          <section className="hatrey-panel space-y-4">
             <div>
-              <h2 className="font-display text-2xl text-[var(--harbor-ink)]">
+              <h2 className="font-display text-2xl text-[var(--hatrey-ink)]">
                 Allocator
               </h2>
-              <p className="mt-1 text-sm text-[var(--harbor-mute)]">
+              <p className="mt-1 text-sm text-[var(--hatrey-mute)]">
                 Chat the desk. Refusals are winning behavior.
               </p>
             </div>
@@ -411,7 +411,7 @@ export function HarborDesk() {
                 <button
                   key={ex}
                   type="button"
-                  className="rounded-full border border-[var(--harbor-line)] bg-white/60 px-3 py-1 text-xs text-[var(--harbor-ink)] transition hover:border-[var(--harbor-sea)]"
+                  className="rounded-full border border-[var(--hatrey-line)] bg-white/60 px-3 py-1 text-xs text-[var(--hatrey-ink)] transition hover:border-[var(--hatrey-sea)]"
                   onClick={() => setPrompt(ex)}
                 >
                   {ex}
@@ -433,7 +433,7 @@ export function HarborDesk() {
                   Reasoning…
                 </>
               ) : (
-                "Ask Harbor"
+                "Ask Hatrey"
               )}
             </Button>
 
@@ -450,7 +450,7 @@ export function HarborDesk() {
         </div>
 
         <Tabs defaultValue="vaults" className="mt-8">
-          <TabsList className="harbor-tabs">
+          <TabsList className="hatrey-tabs">
             <TabsTrigger value="vaults">Vault board</TabsTrigger>
             <TabsTrigger value="claims">Claim queue</TabsTrigger>
             <TabsTrigger value="ledger">Decision ledger</TabsTrigger>
@@ -460,7 +460,7 @@ export function HarborDesk() {
           <TabsContent value="vaults" className="mt-4">
             <div className="grid gap-3 md:grid-cols-2">
               {vaultSource === "loading" && (
-                <p className="text-sm text-[var(--harbor-mute)] md:col-span-2">
+                <p className="text-sm text-[var(--hatrey-mute)] md:col-span-2">
                   Refreshing live IXS vaults… showing cached board meanwhile.
                 </p>
               )}
@@ -468,7 +468,7 @@ export function HarborDesk() {
                 <VaultCard key={v.id} vault={v} mandate={mandate} />
               ))}
               {vaults.length === 0 && (
-                <p className="text-sm text-[var(--harbor-mute)]">
+                <p className="text-sm text-[var(--hatrey-mute)]">
                   No vaults returned. Check IXS connectivity.
                 </p>
               )}
@@ -477,21 +477,21 @@ export function HarborDesk() {
 
           <TabsContent value="claims" className="mt-4">
             <div className="space-y-3">
-              <p className="text-sm text-[var(--harbor-mute)]">
-                Async capital is not cash. Advance a claim to see Harbor block or
+              <p className="text-sm text-[var(--hatrey-mute)]">
+                Async capital is not cash. Advance a claim to see Hatrey block or
                 clear allocates.
               </p>
               {claims.map((c) => (
-                <div key={c.id} className="harbor-row">
+                <div key={c.id} className="hatrey-row">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div>
-                      <p className="font-medium text-[var(--harbor-ink)]">
+                      <p className="font-medium text-[var(--hatrey-ink)]">
                         {c.kind} · {c.vaultName}
                       </p>
-                      <p className="text-sm text-[var(--harbor-mute)]">
+                      <p className="text-sm text-[var(--hatrey-mute)]">
                         {c.amountLabel}
                       </p>
-                      <p className="mt-1 text-xs text-[var(--harbor-mute)]">
+                      <p className="mt-1 text-xs text-[var(--hatrey-mute)]">
                         {c.note}
                       </p>
                     </div>
@@ -525,10 +525,10 @@ export function HarborDesk() {
           </TabsContent>
 
           <TabsContent value="ledger" className="mt-4">
-            <ScrollArea className="h-[420px] rounded-xl border border-[var(--harbor-line)] bg-white/50 p-3">
+            <ScrollArea className="h-[420px] rounded-xl border border-[var(--hatrey-line)] bg-white/50 p-3">
               {ledger.length === 0 ? (
-                <p className="p-4 text-sm text-[var(--harbor-mute)]">
-                  Empty ledger. Ask Harbor for an allocation decision.
+                <p className="p-4 text-sm text-[var(--hatrey-mute)]">
+                  Empty ledger. Ask Hatrey for an allocation decision.
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -541,13 +541,13 @@ export function HarborDesk() {
           </TabsContent>
 
           <TabsContent value="revenue" className="mt-4">
-            <div className="harbor-panel space-y-4">
+            <div className="hatrey-panel space-y-4">
               <div>
                 <h3 className="font-display text-xl">Paid allocation memo</h3>
-                <p className="mt-1 text-sm text-[var(--harbor-mute)]">
+                <p className="mt-1 text-sm text-[var(--hatrey-mute)]">
                   <code className="text-xs">POST /api/quote</code> — other agents
                   pay $0.25 USDC for “should idle USDC sit in licensed RWA right
-                  now?” Demo paywall via <code className="text-xs">X-Harbor-Paid</code>.
+                  now?” Demo paywall via <code className="text-xs">X-Hatrey-Paid</code>.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -564,7 +564,7 @@ export function HarborDesk() {
                 </p>
               )}
               {quoteMemo && (
-                <pre className="overflow-x-auto rounded-lg bg-[var(--harbor-deep)] p-4 text-xs leading-relaxed text-[var(--harbor-foam)] whitespace-pre-wrap">
+                <pre className="overflow-x-auto rounded-lg bg-[var(--hatrey-deep)] p-4 text-xs leading-relaxed text-[var(--hatrey-foam)] whitespace-pre-wrap">
                   {quoteMemo}
                 </pre>
               )}
@@ -573,8 +573,8 @@ export function HarborDesk() {
         </Tabs>
       </main>
 
-      <footer className="border-t border-[var(--harbor-line)] py-8 text-center text-xs text-[var(--harbor-mute)]">
-        Harbor · OpenServ hackathon track: IXS Vaults · Submissions close 28 Sep
+      <footer className="border-t border-[var(--hatrey-line)] py-8 text-center text-xs text-[var(--hatrey-mute)]">
+        Hatrey · OpenServ hackathon track: IXS Vaults · Submissions close 28 Sep
         2026 00:00 UTC
       </footer>
     </div>
@@ -600,16 +600,16 @@ function VaultCard({
   vault,
   mandate,
 }: {
-  vault: HarborVault;
+  vault: HatreyVault;
   mandate: Mandate;
 }) {
   const blocked = mandate.permissionlessOnly && vault.requiresWhitelist;
   return (
-    <article className={`harbor-row ${blocked ? "opacity-70" : ""}`}>
+    <article className={`hatrey-row ${blocked ? "opacity-70" : ""}`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className="font-medium text-[var(--harbor-ink)]">{vault.name}</h3>
-          <p className="text-xs text-[var(--harbor-mute)]">
+          <h3 className="font-medium text-[var(--hatrey-ink)]">{vault.name}</h3>
+          <p className="text-xs text-[var(--hatrey-mute)]">
             {vault.chainName} · {vault.symbol}
           </p>
         </div>
@@ -620,10 +620,10 @@ function VaultCard({
           <Badge variant="secondary">{vault.settlement}</Badge>
         </div>
       </div>
-      <p className="mt-2 line-clamp-3 text-sm text-[var(--harbor-mute)]">
+      <p className="mt-2 line-clamp-3 text-sm text-[var(--hatrey-mute)]">
         {vault.description ?? "IXS licensed RWA vault."}
       </p>
-      <div className="mt-3 flex flex-wrap gap-3 text-xs text-[var(--harbor-mute)]">
+      <div className="mt-3 flex flex-wrap gap-3 text-xs text-[var(--hatrey-mute)]">
         <span>
           PPS{" "}
           {vault.pricePerShare != null
@@ -650,7 +650,7 @@ function DecisionCard({
 }) {
   const d = entry.decision;
   return (
-    <article className="harbor-row animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <article className="hatrey-row animate-in fade-in slide-in-from-bottom-2 duration-500">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Badge
           variant={
@@ -661,26 +661,26 @@ function DecisionCard({
         >
           {d.action}
         </Badge>
-        <div className="flex gap-1.5 text-[10px] uppercase tracking-wide text-[var(--harbor-mute)]">
+        <div className="flex gap-1.5 text-[10px] uppercase tracking-wide text-[var(--hatrey-mute)]">
           <span>{entry.source}</span>
           <span>·</span>
           <span>shadow {entry.shadowAgent}</span>
         </div>
       </div>
       {!compact && (
-        <p className="mt-2 text-sm text-[var(--harbor-mute)]">“{entry.prompt}”</p>
+        <p className="mt-2 text-sm text-[var(--hatrey-mute)]">“{entry.prompt}”</p>
       )}
-      <p className="mt-2 text-sm font-medium text-[var(--harbor-ink)]">
+      <p className="mt-2 text-sm font-medium text-[var(--hatrey-ink)]">
         {d.vaultName ?? "No vault"}
         {d.sizeUsdc != null ? ` · $${d.sizeUsdc.toLocaleString()}` : ""}
       </p>
-      <ul className="mt-2 space-y-1 text-sm text-[var(--harbor-mute)]">
+      <ul className="mt-2 space-y-1 text-sm text-[var(--hatrey-mute)]">
         {d.reasons.map((r) => (
           <li key={r}>· {r}</li>
         ))}
       </ul>
       {d.nextClaimStep && (
-        <p className="mt-2 rounded-md bg-[var(--harbor-wash)] px-2 py-1.5 text-xs text-[var(--harbor-ink)]">
+        <p className="mt-2 rounded-md bg-[var(--hatrey-wash)] px-2 py-1.5 text-xs text-[var(--hatrey-ink)]">
           Next: {d.nextClaimStep}
         </p>
       )}
@@ -689,8 +689,8 @@ function DecisionCard({
           <Separator className="my-3" />
           <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
             {Object.entries(d.mandateChecks).map(([k, v]) => (
-              <div key={k} className="rounded-md border border-[var(--harbor-line)] px-2 py-1">
-                <span className="text-[var(--harbor-mute)]">{k}</span>
+              <div key={k} className="rounded-md border border-[var(--hatrey-line)] px-2 py-1">
+                <span className="text-[var(--hatrey-mute)]">{k}</span>
                 <p className={v ? "text-emerald-800" : "text-red-700"}>
                   {v ? "ok" : "fail"}
                 </p>
@@ -699,16 +699,16 @@ function DecisionCard({
           </div>
           {entry.txSteps.length > 0 && (
             <div className="mt-3 space-y-1">
-              <p className="text-xs font-medium text-[var(--harbor-ink)]">
+              <p className="text-xs font-medium text-[var(--hatrey-ink)]">
                 Unsigned tx steps
               </p>
               {entry.txSteps.map((s, i) => (
-                <p key={`${s.type}-${i}`} className="font-mono text-[11px] text-[var(--harbor-mute)]">
+                <p key={`${s.type}-${i}`} className="font-mono text-[11px] text-[var(--hatrey-mute)]">
                   {s.type}: {s.description}
                 </p>
               ))}
               {txNote && (
-                <p className="text-[11px] text-[var(--harbor-mute)]">{txNote}</p>
+                <p className="text-[11px] text-[var(--hatrey-mute)]">{txNote}</p>
               )}
             </div>
           )}

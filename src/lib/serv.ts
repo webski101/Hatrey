@@ -3,7 +3,7 @@ import {
   AllocationDecisionSchema,
   type AllocationDecision,
   type ClaimRequest,
-  type HarborVault,
+  type HatreyVault,
   type Mandate,
 } from "@/lib/types";
 
@@ -33,7 +33,7 @@ function maxRwaBudget(mandate: Mandate): number {
 export function mockAllocate(input: {
   prompt: string;
   mandate: Mandate;
-  vaults: HarborVault[];
+  vaults: HatreyVault[];
   claims: ClaimRequest[];
 }): {
   decision: AllocationDecision;
@@ -54,7 +54,7 @@ export function mockAllocate(input: {
         sizeUsdc: null,
         reasons: [
           "A claimable settlement is outstanding — capital is not idle cash until claimed.",
-          "Harbor refuses new allocate/redeem while a claim step is ready.",
+          "Hatrey refuses new allocate/redeem while a claim step is ready.",
         ],
         settlement: claim.settlement,
         nextClaimStep: `Call vault_build_claim_${claim.kind} for request ${claim.id}`,
@@ -136,7 +136,7 @@ export function mockAllocate(input: {
         sizeUsdc: null,
         reasons: [
           "No vaults pass the mandate (permissionless-only / active filter).",
-          "KYC vaults are visible but Harbor will not allocate into them under this mandate.",
+          "KYC vaults are visible but Hatrey will not allocate into them under this mandate.",
         ],
         settlement: null,
         nextClaimStep: null,
@@ -183,7 +183,7 @@ export function mockAllocate(input: {
         sizeUsdc: null,
         reasons: [
           `Liquidity buffer of $${mandate.liquidityBufferUsdc.toLocaleString()} would be breached.`,
-          "Harbor refuses rather than maximize yield.",
+          "Hatrey refuses rather than maximize yield.",
         ],
         settlement: null,
         nextClaimStep: null,
@@ -291,7 +291,7 @@ export function mockAllocate(input: {
 export async function allocateWithServ(input: {
   prompt: string;
   mandate: Mandate;
-  vaults: HarborVault[];
+  vaults: HatreyVault[];
   claims: ClaimRequest[];
 }): Promise<{
   decision: AllocationDecision;
@@ -304,7 +304,7 @@ export async function allocateWithServ(input: {
     return { ...mock, source: "mock" };
   }
 
-  const system = `You are Harbor, a fiduciary desk for agent treasuries allocating idle USDC into licensed IXS RWA vaults.
+  const system = `You are Hatrey, a fiduciary desk for agent treasuries allocating idle USDC into licensed IXS RWA vaults.
 
 Hard rules:
 1. Never maximize yield at the expense of the mandate.

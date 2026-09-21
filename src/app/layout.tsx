@@ -3,17 +3,17 @@ import { Fraunces, Figtree } from "next/font/google";
 import "./globals.css";
 
 const display = Fraunces({
-  variable: "--font-harbor-display",
+  variable: "--font-hatrey-display",
   subsets: ["latin"],
 });
 
 const sans = Figtree({
-  variable: "--font-harbor-sans",
+  variable: "--font-hatrey-sans",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Harbor — IXS RWA desk for agent treasuries",
+  title: "Hatrey — IXS RWA desk for agent treasuries",
   description:
     "Mandate-gated allocator for licensed IXS RWA vaults. SERV decides. Settlement-aware. Built for OpenServ Hackathon Edition 01.",
 };

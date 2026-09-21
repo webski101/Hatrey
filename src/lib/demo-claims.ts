@@ -1,6 +1,6 @@
 import type { ClaimRequest } from "@/lib/types";
 
-/** Seed claim queue so demos show Harbor's settlement differentiator without on-chain history. */
+/** Seed claim queue so demos show Hatrey's settlement differentiator without on-chain history. */
 export const DEMO_CLAIMS: ClaimRequest[] = [
   {
     id: "req_demo_deposit_01",
@@ -22,6 +22,6 @@ export const DEMO_CLAIMS: ClaimRequest[] = [
     status: "claimable",
     settlement: "async-erc7540",
     requestedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    note: "Claimable now. Harbor blocks new allocates until claim tx is built and sent.",
+    note: "Claimable now. Hatrey blocks new allocates until claim tx is built and sent.",
   },
 ];

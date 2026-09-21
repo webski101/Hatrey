@@ -29,7 +29,7 @@ const BodySchema = z.object({
     .string()
     .regex(/^0x[a-fA-F0-9]{40}$/)
     .optional()
-    .default("0xHarborDemo000000000000000000000000000001"),
+    .default("0xHatreyDemo000000000000000000000000000001"),
 });
 
 export async function POST(req: Request) {
