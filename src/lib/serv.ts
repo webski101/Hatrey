@@ -352,7 +352,7 @@ Schema:
 
   try {
     const completion = await client.chat.completions.create({
-      model: process.env.SERV_MODEL ?? "gpt-4.1-mini",
+      model: process.env.SERV_MODEL ?? "gpt-5.4-mini",
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
