@@ -55,12 +55,6 @@ Without `SERV_API_KEY`, Hatrey uses a deterministic mock reasoner so the desk st
 - `GET /api/claims` — demo claim queue
 - `GET|POST /api/quote` — paid allocation memo ($0.25 demo)
 
-## Hackathon entry checklist
-
-1. Create an account at [console.openserv.ai](https://console.openserv.ai) and enable **data collection** at `/settings/organization`.
-2. Create an API key; put it in `.env.local` as `SERV_API_KEY`.
-3. Ship a public demo + GitHub.
-4. Before **28 September 2026, 00:00 UTC**: post on X with name, concept, images, links, tag **@openservai**, then fill the official form linked from [openserv.ai/hackathon](https://www.openserv.ai/hackathon).
 
 ## License
 
